@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tela de Login'),
+        title: Text('Login'),
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
