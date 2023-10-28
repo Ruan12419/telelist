@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ToWatch'),
+        title: Text('TeleList'),
         automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
