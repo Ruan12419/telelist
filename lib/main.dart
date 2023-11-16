@@ -9,7 +9,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => User("user", "123"),
-      child: MaterialApp(
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Login(),
       ),
