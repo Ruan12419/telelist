@@ -16,8 +16,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User>(context);
+    User user = Provider.of<User>(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Login'),
         backgroundColor: Colors.grey,
@@ -54,7 +55,7 @@ class _LoginState extends State<Login> {
                       }
                       return null;
                     },
-                    onSaved: (value) => user.setUsername(value!),
+                    onSaved: (value) => user.username = (value!),
                   ),
                   Padding(padding: const EdgeInsets.all(5)),
                   TextFormField(
@@ -88,7 +89,11 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        if (user.isUserRegistered(
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                        );
+                        /*if (user.isUserRegistered(
                             user.username, user.password)) {
                           Navigator.pushReplacement(
                             context,
@@ -100,7 +105,7 @@ class _LoginState extends State<Login> {
                             const SnackBar(
                                 content: Text('Usuário não registrado')),
                           );
-                        }
+                        }*/
                       }
                     },
                   ),

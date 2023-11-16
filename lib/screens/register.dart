@@ -37,7 +37,7 @@ class _RegisterState extends State<Register> {
                   }
                   return null;
                 },
-                onSaved: (value) => user.setFirstName(value!),
+                //onSaved: (value) => user.setFirstName(value!),
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -49,7 +49,7 @@ class _RegisterState extends State<Register> {
                   }
                   return null;
                 },
-                onSaved: (value) => user.setLastName(value!),
+                //onSaved: (value) => user.setLastName(value!),
               ),
               TextFormField(
                 initialValue: user.username,
@@ -92,12 +92,12 @@ class _RegisterState extends State<Register> {
                   }
                   return null;
                 },
-                onSaved: (value) {
+                /*onSaved: (value) {
                   user.setPassword(
                       _password!); // Defina a senha do usuário depois de validar
                   user.registerUser(user.username, user.password,
                       user.firstName, user.lastName); // Registre o usuário
-                },
+                },*/
               ),
               ElevatedButton(
                 child: const Text('Registrar'),
