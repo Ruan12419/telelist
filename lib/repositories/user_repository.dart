@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class UserRepository {
   final dio = Dio();
-  final String apiUrl = '';
+  final String apiUrl = 'https://jsonplaceholder.typicode.com/todos/';
 
   List users = [];
 

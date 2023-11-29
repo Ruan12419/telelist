@@ -18,7 +18,7 @@ void main() {
 }
 
 BottomNavigationBar bottomNavigation(int currentIndex, BuildContext context) {
-  final List<Widget> _children = [HomeScreen(), Profile()];
+  final List<Widget> _children = [Home(), Profile()];
   if (currentIndex == 1) {
     _children[0] = Home();
     _children[1] = ProfileScreen();
@@ -37,10 +37,12 @@ BottomNavigationBar bottomNavigation(int currentIndex, BuildContext context) {
       ),
     ],
     onTap: (index) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => _children[index]),
-      );
+      if (index != currentIndex) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => _children[index]),
+        );
+      }
     },
   );
 }
