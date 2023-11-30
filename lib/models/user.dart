@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class User extends ChangeNotifier {
+  String userId = '';
   String username;
   String password;
 
@@ -12,6 +13,13 @@ class User extends ChangeNotifier {
 
   Map<String, dynamic> toJson() {
     return {'username': username, 'password': password};
+  }
+
+  void setUser(User user) {
+    username = user.username;
+    password = user.password;
+    userId = user.userId;
+    notifyListeners();
   }
 
   void setUsername(String username) {

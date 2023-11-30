@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/screens/home.dart';
-import '/screens/register.dart';
 import '/models/user.dart';
+import '/repositories/user_repository.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,30 +13,32 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+  final UserRepository userRepository = UserRepository();
+
+  String username = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<User>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: Colors.grey,
+        title: const Text('Login', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
       ),
-      backgroundColor: Colors.grey[350],
+      backgroundColor: const Color.fromARGB(255, 0, 84, 159),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            Padding(padding: const EdgeInsets.all(20)),
+            const Padding(padding: EdgeInsets.all(20)),
             Image.asset("imagens/logo.jpeg"),
-            Padding(padding: const EdgeInsets.all(20)),
+            const Padding(padding: EdgeInsets.all(20)),
             Form(
               key: _formKey,
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    initialValue: user.username,
                     decoration: const InputDecoration(
                       fillColor: Color.fromARGB(255, 238, 238, 238),
                       filled: true,
@@ -55,11 +57,10 @@ class _LoginState extends State<Login> {
                       }
                       return null;
                     },
-                    onSaved: (value) => user.username = (value!),
+                    onSaved: (value) => username = value!,
                   ),
-                  Padding(padding: const EdgeInsets.all(5)),
+                  const Padding(padding: EdgeInsets.all(5)),
                   TextFormField(
-                    initialValue: user.password,
                     decoration: const InputDecoration(
                       fillColor: Color.fromARGB(255, 238, 238, 238),
                       filled: true,
@@ -79,22 +80,21 @@ class _LoginState extends State<Login> {
                       }
                       return null;
                     },
-                    onSaved: (value) => user.setPassword(value!),
+                    onSaved: (value) => password = value!,
                   ),
-                  Padding(padding: const EdgeInsets.all(20)),
+                  const Padding(padding: EdgeInsets.all(20)),
                   ElevatedButton(
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.black),
                     child: const Text('Entrar'),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Home()),
-                        );
-                        /*if (user.isUserRegistered(
-                            user.username, user.password)) {
+                        User user = User(username, password);
+                        user.userId = await userRepository.fetchUsers(user);
+                        if (user.userId.isNotEmpty) {
+                          Provider.of<User>(context, listen: false)
+                              .setUser(user);
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -105,22 +105,8 @@ class _LoginState extends State<Login> {
                             const SnackBar(
                                 content: Text('Usuário não registrado')),
                           );
-                        }*/
+                        }
                       }
-                    },
-                  ),
-                  Padding(padding: const EdgeInsets.all(5)),
-                  TextButton(
-                    child: const Text(
-                      'Registrar',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Register()),
-                      );
                     },
                   ),
                 ],

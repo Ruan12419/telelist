@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:telelist/screens/home.dart';
-import 'package:telelist/screens/profile.dart';
+import 'package:telelist/screens/all_movies.dart';
+import '/screens/home.dart';
+import '/screens/profile.dart';
 import '/screens/login.dart';
 import '/models/user.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => User("user", "123"),
+      create: (context) => User('', ''),
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Login(),
@@ -18,10 +19,11 @@ void main() {
 }
 
 BottomNavigationBar bottomNavigation(int currentIndex, BuildContext context) {
-  final List<Widget> _children = [Home(), Profile()];
+  final List<Widget> children = [const Home(), const Movies(), const Profile()];
   if (currentIndex == 1) {
-    _children[0] = Home();
-    _children[1] = ProfileScreen();
+    children[0] = const Home();
+    children[1] = const Movies();
+    children[2] = const Profile();
   }
 
   return BottomNavigationBar(
@@ -32,6 +34,10 @@ BottomNavigationBar bottomNavigation(int currentIndex, BuildContext context) {
         label: 'Home',
       ),
       BottomNavigationBarItem(
+        icon: Icon(Icons.movie),
+        label: 'Filmes',
+      ),
+      BottomNavigationBarItem(
         icon: Icon(Icons.person),
         label: 'Perfil',
       ),
@@ -40,7 +46,7 @@ BottomNavigationBar bottomNavigation(int currentIndex, BuildContext context) {
       if (index != currentIndex) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => _children[index]),
+          MaterialPageRoute(builder: (context) => children[index]),
         );
       }
     },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:telelist/main.dart';
+import 'package:telelist/screens/all_movies.dart';
 import 'package:telelist/screens/home.dart';
 import '/models/user.dart';
 
@@ -12,15 +13,21 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  int _currentIndex = 1;
-  final List<Widget> _children = [Home(), ProfileScreen()];
+  final int _currentIndex = 2;
+  final List<Widget> _children = [
+    const Home(),
+    const Movies(),
+    const ProfileScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Perfil'),
+        title: const Text('Perfil', style: TextStyle(color: Colors.black)),
+        backgroundColor: const Color.fromARGB(255, 230, 230, 230),
       ),
+      backgroundColor: const Color.fromARGB(255, 0, 84, 159),
       body: _children[_currentIndex],
       bottomNavigationBar: bottomNavigation(
         _currentIndex,
@@ -31,8 +38,7 @@ class _ProfileState extends State<Profile> {
 }
 
 class ProfileScreen extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
-  String? _password;
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,77 +47,8 @@ class ProfileScreen extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          Text('Nome de usuário: ${user.username}'),
-          ElevatedButton(
-            child: const Text('Alterar senha'),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Alterar senha'),
-                    content: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Nova senha',
-                            ),
-                            obscureText: true,
-                            onChanged: (value) => _password = value,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, insira sua nova senha';
-                              }
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Confirme a nova senha',
-                            ),
-                            obscureText: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, confirme sua nova senha';
-                              }
-                              if (value != _password) {
-                                return 'As senhas não correspondem';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) => user.setPassword(_password!),
-                          ),
-                        ],
-                      ),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Cancelar'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Salvar'),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Senha alterada com sucesso')),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
+          Text('Nome de usuário: ${user.username}',
+              style: const TextStyle(color: Colors.white)),
         ],
       ),
     );
