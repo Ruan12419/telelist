@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:telelist/main.dart';
 import 'package:telelist/repositories/user_repository.dart';
+import 'package:telelist/screens/movies_info.dart';
 import 'package:telelist/screens/my_list.dart';
 import 'package:telelist/screens/watched.dart';
 import 'package:telelist/screens/watching.dart';
@@ -45,59 +46,70 @@ class _HomeState extends State<Home> {
               scrollDirection: Axis.horizontal,
               itemCount: users.length,
               itemBuilder: (context, index) {
-                return Container(
-                  width: 160,
-                  margin: const EdgeInsets.all(10),
-                  color: Colors.blue,
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset("imagens/logo.jpeg"),
-                      Positioned(
-                        bottom: 0,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(7),
-                              topRight: Radius.circular(7),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MoviesInfo(movie: users[index]),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 160,
+                    margin: const EdgeInsets.all(10),
+                    color: Colors.blue,
+                    child: Stack(
+                      children: <Widget>[
+                        Image.asset("imagens/logo.jpeg"),
+                        Positioned(
+                          bottom: 0,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(7),
+                                topRight: Radius.circular(7),
+                              ),
                             ),
-                          ),
-                          width: 160,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Flexible(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    users[index]['title'],
-                                    style: const TextStyle(color: Colors.black),
-                                    textAlign: TextAlign.center,
+                            width: 160,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      users[index]['title'],
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.favorite,
-                                    color: favorites.isEmpty
-                                        ? Colors.grey
-                                        : favorites[index]
-                                            ? Colors.red
-                                            : Colors.grey),
-                                onPressed: () {
-                                  setState(() {
-                                    favorites[index] = !favorites[index];
-                                  });
-                                  if (kDebugMode) {
-                                    print(
-                                        'Filme ${users[index]['title']} marcado como favorito');
-                                  }
-                                },
-                              ),
-                            ],
+                                IconButton(
+                                  icon: Icon(Icons.favorite,
+                                      color: favorites.isEmpty
+                                          ? Colors.grey
+                                          : favorites[index]
+                                              ? Colors.red
+                                              : Colors.grey),
+                                  onPressed: () {
+                                    setState(() {
+                                      favorites[index] = !favorites[index];
+                                    });
+                                    if (kDebugMode) {
+                                      print(
+                                          'Filme ${users[index]['title']} marcado como favorito');
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
