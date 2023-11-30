@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MoviesInfo extends StatefulWidget {
-  const MoviesInfo({super.key});
+  final dynamic movie;
+
+  const MoviesInfo({Key? key, required this.movie}) : super(key: key);
 
   @override
   State<MoviesInfo> createState() => _MoviesInfoState();
@@ -10,6 +12,10 @@ class MoviesInfo extends StatefulWidget {
 class _MoviesInfoState extends State<MoviesInfo> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.movie["title"]),
+      ),
+    );
   }
 }
