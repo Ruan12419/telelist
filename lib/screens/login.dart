@@ -22,16 +22,12 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text('Login', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
-      ),
       backgroundColor: const Color.fromARGB(255, 0, 84, 159),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            const Padding(padding: EdgeInsets.all(20)),
+            const Padding(padding: EdgeInsets.only(top: 100)),
             Image.asset("imagens/logo.jpeg"),
             const Padding(padding: EdgeInsets.all(20)),
             Form(

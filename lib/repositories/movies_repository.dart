@@ -5,8 +5,10 @@ class MoviesRepository {
   final dio = Dio();
   final String apiUrl = 'https://apiloomi.onrender.com/filme/';
   List<Movie> _movies = [];
+  late Movie _movie;
 
   List<Movie> get movies => _movies;
+  Movie get movie => _movie;
 
   Future<List<Movie>> fetchMovies(String userId) async {
     final response = await dio.get(
@@ -41,7 +43,8 @@ class MoviesRepository {
     );
 
     if (response.statusCode == 200) {
-      return Movie.fromJson(response.data);
+      _movie = Movie.fromJson(response.data);
+      return _movie;
     } else {
       throw Exception("Falha ao buscar filme!");
     }
@@ -103,7 +106,7 @@ class MoviesRepository {
       ),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 204) {
       return response.data;
     } else {
       throw Exception("Falha ao deletar o filme!");
@@ -111,6 +114,20 @@ class MoviesRepository {
   }
 
   Future<Movie> createMovie(String userId, Movie movieData) async {
+    var movie = {
+      "titulo": movieData.titulo,
+      "descricao": movieData.descricao,
+      "link_imagem": movieData.linkImagem,
+      "data_de_lancamento": movieData.dataDeLancamento,
+      "diretores": movieData.diretores,
+      "roteiristas": movieData.roteiristas,
+      "atores": movieData.atores,
+      "generos": movieData.generos,
+      "comentarios": movieData.comentarios,
+      "estrelas": movieData.estrelas,
+      "favorito": movieData.favorito,
+      "status": movieData.status,
+    };
     final response = await dio.post(
       '${apiUrl}user/$userId/',
       options: Options(
@@ -121,10 +138,10 @@ class MoviesRepository {
               'NjvxHGV62q95v4lULzPEfK0ylD9qLdCK3NtvueOG23CknQQENmZRDIJTQ826JZ6A',
         },
       ),
-      data: movieData.toJson(),
+      data: movie,
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return Movie.fromJson(response.data);
     } else {
       throw Exception("Falha ao criar o filme!");

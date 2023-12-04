@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:telelist/main.dart';
-import 'package:telelist/screens/all_movies.dart';
+import 'package:telelist/screens/movies_screen.dart';
 import 'package:telelist/screens/home.dart';
 import '/models/user.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class Favorite extends StatefulWidget {
+  const Favorite({super.key});
 
   @override
-  _ProfileState createState() => _ProfileState();
+  _FavoriteState createState() => _FavoriteState();
 }
 
-class _ProfileState extends State<Profile> {
+class _FavoriteState extends State<Favorite> {
   final int _currentIndex = 2;
   final List<Widget> _children = [
     const Home(),
     const Movies(),
-    const ProfileScreen()
+    const FavoriteScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Perfil', style: TextStyle(color: Colors.black)),
-        backgroundColor: const Color.fromARGB(255, 230, 230, 230),
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text('Favoritos', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
       ),
       backgroundColor: const Color.fromARGB(255, 0, 84, 159),
       body: _children[_currentIndex],
@@ -37,8 +38,8 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class FavoriteScreen extends StatelessWidget {
+  const FavoriteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class ProfileScreen extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text('Nome de usuário: ${user.username}',
-              style: const TextStyle(color: Colors.white)),
+              style: const TextStyle(color: Colors.white, fontSize: 28)),
         ],
       ),
     );

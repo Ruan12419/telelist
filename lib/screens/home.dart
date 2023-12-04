@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:telelist/main.dart';
 import 'package:telelist/models/user.dart';
 import 'package:telelist/repositories/movies_repository.dart';
@@ -9,7 +12,7 @@ import 'package:telelist/screens/my_list.dart';
 import 'package:telelist/screens/watched.dart';
 import 'package:telelist/screens/watching.dart';
 import '/screens/login.dart';
-import '/screens/profile.dart';
+import 'favorites.dart';
 import '/models/movie.dart';
 
 class Home extends StatefulWidget {
@@ -67,7 +70,7 @@ class _HomeState extends State<Home> {
                     color: Colors.white,
                     child: Stack(
                       children: <Widget>[
-                        Image.asset("imagens/logo.jpeg"),
+                        mostraCapa(filteredMovies[index].linkImagem),
                         Positioned(
                           bottom: 0,
                           child: Container(
@@ -99,19 +102,21 @@ class _HomeState extends State<Home> {
                                           ? Colors.red
                                           : Colors.grey),
                                   onPressed: () async {
-                                    setState(() {
-                                      filteredMovies[index].favorito =
-                                          !filteredMovies[index].favorito;
-                                    });
-                                    if (kDebugMode) {
-                                      print(
-                                          'Filme ${filteredMovies[index].titulo} marcado como favorito');
-                                    }
                                     try {
+                                      if (mounted) {
+                                        setState(() {
+                                          filteredMovies[index].favorito =
+                                              !filteredMovies[index].favorito;
+                                        });
+                                      }
+                                      if (kDebugMode) {
+                                        print(
+                                            'Filme ${filteredMovies[index].titulo} marcado como favorito');
+                                      }
                                       await moviesRepository.updateMovie(
-                                          movies[index].uuid,
+                                          filteredMovies[index].uuid,
                                           user.userId,
-                                          movies[index]);
+                                          filteredMovies[index]);
                                     } catch (e) {
                                       if (kDebugMode) {
                                         print('Falha ao atualizar o filme: $e');
@@ -141,7 +146,7 @@ class _HomeState extends State<Home> {
         moviesContainer: (status, context) => moviesContainer(status, context),
         moviesList: movies,
       ),
-      const Profile()
+      const Favorite()
     ];
     return Scaffold(
       appBar: AppBar(
@@ -180,7 +185,7 @@ class _HomeState extends State<Home> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const Login()),
-                (Route<dynamic> route) => false, // nunca permite voltar
+                (Route<dynamic> route) => false,
               );
             },
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:telelist/main.dart';
 import 'package:telelist/models/user.dart';
 import 'package:telelist/repositories/movies_repository.dart';
 import '/models/movie.dart';
@@ -41,7 +42,7 @@ class _MyListPageState extends State<MyListPage> {
             color: Colors.blue,
             child: Stack(
               children: <Widget>[
-                Image.asset("imagens/logo.jpeg"),
+                mostraCapa(widget.movies[index].linkImagem),
                 Positioned(
                   bottom: 0,
                   left: 0,

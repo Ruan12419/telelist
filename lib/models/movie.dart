@@ -1,18 +1,18 @@
 class Movie {
-  final String uuid;
-  final int usuario;
-  final String titulo;
-  final String descricao;
-  final String linkImagem;
-  final String dataDeLancamento;
-  final String diretores;
-  final String roteiristas;
-  final String atores;
-  final String generos;
-  final String comentarios;
-  final double estrelas;
+  String uuid;
+  int usuario;
+  String titulo;
+  String descricao;
+  String linkImagem;
+  String dataDeLancamento;
+  String diretores;
+  String roteiristas;
+  String atores;
+  String generos;
+  String comentarios;
+  double estrelas;
   bool favorito;
-  final String status;
+  String status;
 
   Movie({
     required this.uuid,
