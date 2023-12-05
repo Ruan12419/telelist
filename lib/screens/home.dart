@@ -45,14 +45,20 @@ class _HomeState extends State<Home> {
   }
 
   void updateMoviesList(String query) {
-    var filteredMovies = movies
-        .where(
-            (movie) => movie.titulo.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    if (query.isEmpty) {
+      setState(() {
+        movies = moviesRepository.movies;
+      });
+    } else {
+      var filteredMovies = moviesRepository.movies
+          .where((movie) =>
+              movie.titulo.toLowerCase().contains(query.toLowerCase()))
+          .toList();
 
-    setState(() {
-      movies = filteredMovies;
-    });
+      setState(() {
+        movies = filteredMovies;
+      });
+    }
   }
 
   Widget moviesContainer(String status, BuildContext context) {
