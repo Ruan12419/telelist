@@ -7,6 +7,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:telelist/main.dart';
 import 'package:telelist/models/user.dart';
 import 'package:telelist/repositories/movies_repository.dart';
+import 'package:telelist/screens/home.dart';
 import 'package:telelist/screens/movies_info.dart';
 import 'package:telelist/screens/my_list.dart';
 import 'package:telelist/screens/watched.dart';
@@ -23,8 +24,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final int _currentIndex = 0;
   final MoviesRepository moviesRepository = MoviesRepository();
+  TextEditingController _searchController = TextEditingController();
+  int _currentIndex = 0;
+
   List<Movie> movies = [];
 
   @override
@@ -38,6 +41,17 @@ class _HomeState extends State<Home> {
     await moviesRepository.fetchMovies(user.userId);
     setState(() {
       movies = moviesRepository.movies;
+    });
+  }
+
+  void updateMoviesList(String query) {
+    var filteredMovies = movies
+        .where(
+            (movie) => movie.titulo.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    setState(() {
+      movies = filteredMovies;
     });
   }
 
@@ -103,12 +117,6 @@ class _HomeState extends State<Home> {
                                           : Colors.grey),
                                   onPressed: () async {
                                     try {
-                                      if (mounted) {
-                                        setState(() {
-                                          filteredMovies[index].favorito =
-                                              !filteredMovies[index].favorito;
-                                        });
-                                      }
                                       if (kDebugMode) {
                                         print(
                                             'Filme ${filteredMovies[index].titulo} marcado como favorito');
@@ -141,13 +149,15 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
+
     final List<Widget> children = [
       HomeScreen(
         moviesContainer: (status, context) => moviesContainer(status, context),
         moviesList: movies,
       ),
-      const Favorite()
+      const Favorite(),
     ];
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -157,8 +167,12 @@ class _HomeState extends State<Home> {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (query) {
+                    updateMoviesList(query);
+                  },
+                  decoration: const InputDecoration(
                     hintText: 'Pesquisar',
                     prefixIcon: Icon(Icons.search),
                     filled: true,
@@ -196,68 +210,6 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: bottomNavigation(
         _currentIndex,
         context,
-      ),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  final Widget Function(String, BuildContext) moviesContainer;
-  final List<Movie> moviesList;
-
-  const HomeScreen(
-      {Key? key, required this.moviesContainer, required this.moviesList})
-      : super(key: key);
-
-  Padding moviesListView(String type, BuildContext context, int screen) {
-    List screens = [
-      MyListPage(
-          movies: moviesList
-              .where((movie) => movie.status == "Para assistir")
-              .toList()),
-      Watching(
-          movies: moviesList
-              .where((movie) => movie.status == "Assistindo")
-              .toList()),
-      Watched(
-          movies: moviesList
-              .where((movie) => movie.status == "Assistido")
-              .toList()),
-    ];
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: TextButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => screens[screen],
-              ),
-            );
-          },
-          child: Text(
-            "$type ",
-            style: const TextStyle(fontSize: 25, color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          moviesListView("Minha Lista", context, 0),
-          moviesContainer("Para assistir", context),
-          moviesListView("Assistindo", context, 1),
-          moviesContainer("Assistindo", context),
-          moviesListView("Assistidos", context, 2),
-          moviesContainer("Assistido", context),
-        ],
       ),
     );
   }
