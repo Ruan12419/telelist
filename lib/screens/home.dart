@@ -214,3 +214,65 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+class HomeScreen extends StatelessWidget {
+  final Widget Function(String, BuildContext) moviesContainer;
+  final List<Movie> moviesList;
+
+  const HomeScreen(
+      {Key? key, required this.moviesContainer, required this.moviesList})
+      : super(key: key);
+
+  Padding moviesListView(String type, BuildContext context, int screen) {
+    List screens = [
+      MyListPage(
+          movies: moviesList
+              .where((movie) => movie.status == "Para assistir")
+              .toList()),
+      Watching(
+          movies: moviesList
+              .where((movie) => movie.status == "Assistindo")
+              .toList()),
+      Watched(
+          movies: moviesList
+              .where((movie) => movie.status == "Assistido")
+              .toList()),
+    ];
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => screens[screen],
+              ),
+            );
+          },
+          child: Text(
+            "$type ",
+            style: const TextStyle(fontSize: 25, color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          moviesListView("Minha Lista", context, 0),
+          moviesContainer("Para assistir", context),
+          moviesListView("Assistindo", context, 1),
+          moviesContainer("Assistindo", context),
+          moviesListView("Assistidos", context, 2),
+          moviesContainer("Assistido", context),
+        ],
+      ),
+    );
+  }
+}
