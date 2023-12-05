@@ -22,8 +22,14 @@ class _WatchingState extends State<Watching> {
     var user = Provider.of<User>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Assistindo'),
-        backgroundColor: const Color.fromARGB(255, 230, 230, 230),
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const Text(
+          'Assistindo',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
