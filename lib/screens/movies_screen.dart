@@ -17,6 +17,7 @@ class Movies extends StatefulWidget {
 
 class _MoviesState extends State<Movies> {
   final int _currentIndex = 1;
+  TextEditingController _searchController = TextEditingController();
   final MoviesRepository moviesRepository = MoviesRepository();
   List<Movie> movies = [];
 
@@ -32,6 +33,23 @@ class _MoviesState extends State<Movies> {
     setState(() {
       movies = moviesRepository.movies;
     });
+  }
+
+  void updateMoviesList(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        movies = moviesRepository.movies;
+      });
+    } else {
+      var filteredMovies = moviesRepository.movies
+          .where((movie) =>
+              movie.titulo.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+
+      setState(() {
+        movies = filteredMovies;
+      });
+    }
   }
 
   Widget moviesContainer(User user) {
@@ -163,16 +181,29 @@ class _MoviesState extends State<Movies> {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: const TextField(
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (query) {
+                    updateMoviesList(query);
+                  },
                   decoration: InputDecoration(
                     hintText: 'Pesquisar',
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search),
                     filled: true,
                     fillColor: Colors.white,
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(30.0)),
                       borderSide: BorderSide.none,
                     ),
+                    suffixIcon: _searchController.text.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              updateMoviesList('');
+                            },
+                          )
+                        : null,
                   ),
                 ),
               ),

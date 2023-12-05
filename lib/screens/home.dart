@@ -123,6 +123,12 @@ class _HomeState extends State<Home> {
                                           : Colors.grey),
                                   onPressed: () async {
                                     try {
+                                      if (mounted) {
+                                        setState(() {
+                                          filteredMovies[index].favorito =
+                                              !filteredMovies[index].favorito;
+                                        });
+                                      }
                                       if (kDebugMode) {
                                         print(
                                             'Filme ${filteredMovies[index].titulo} marcado como favorito');
@@ -172,32 +178,33 @@ class _HomeState extends State<Home> {
             const SizedBox(width: 10),
             Expanded(
               child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextField(
-                    controller: _searchController,
-                    onChanged: (query) {
-                      updateMoviesList(query);
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Pesquisar',
-                      prefixIcon: const Icon(Icons.search),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        borderSide: BorderSide.none,
-                      ),
-                      suffixIcon: _searchController.text.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.clear),
-                              onPressed: () {
-                                _searchController.clear();
-                                updateMoviesList('');
-                              },
-                            )
-                          : null,
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (query) {
+                    updateMoviesList(query);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Pesquisar',
+                    prefixIcon: const Icon(Icons.search),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                      borderSide: BorderSide.none,
                     ),
-                  )),
+                    suffixIcon: _searchController.text.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              updateMoviesList('');
+                            },
+                          )
+                        : null,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
